@@ -25,7 +25,7 @@ public class Wget implements Runnable {
                 if ((dateBuffer.length - speed) < 0) {
                     Thread.sleep(1000);
                 } else {
-                    fileOutputStream.write(dateBuffer, 0, bytesRead);;
+                    fileOutputStream.write(dateBuffer, 0, bytesRead);
                 }
             }
         } catch (IOException | InterruptedException e) {
