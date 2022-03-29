@@ -21,9 +21,12 @@ public class Wget implements Runnable {
              FileOutputStream fileOutputStream = new FileOutputStream("pom_tmp.xml")) {
             byte[] dateBuffer = new byte[1024];
             int bytesRead;
-            while ((bytesRead = in.read(dateBuffer, 0, 1024)) != -1) {
-                fileOutputStream.write(dateBuffer, 0, bytesRead);
-                Thread.sleep(1000);
+            while ((bytesRead = in.read(dateBuffer, speed, 1024)) != -1) {
+                if ((dateBuffer.length - speed) < 0) {
+                    Thread.sleep(1000);
+                } else {
+                    fileOutputStream.write(dateBuffer, 0, bytesRead);;
+                }
             }
         } catch (IOException | InterruptedException e) {
             e.printStackTrace();
