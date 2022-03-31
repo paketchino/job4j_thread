@@ -18,16 +18,25 @@ public class Wget implements Runnable {
     @Override
     public void run() {
         try (BufferedInputStream in = new BufferedInputStream(new URL(url).openStream());
-             FileOutputStream fileOutputStream = new FileOutputStream("pom_tmp.xml")) {
+             FileOutputStream fileOutputStream = new FileOutputStream(url)) {
             byte[] dateBuffer = new byte[1024];
             int bytesRead;
-            while ((bytesRead = in.read(dateBuffer, speed, 1024)) != -1) {
-                if ((dateBuffer.length - speed) < 0) {
-                    Thread.sleep(1000);
-                } else {
-                    fileOutputStream.write(dateBuffer, 0, bytesRead);
+            int downloadData = 0;
+            long begin = System.currentTimeMillis();
+            while ((bytesRead = in.read(dateBuffer, 0, 1024)) != -1) {
+                downloadData = bytesRead;
+                if (downloadData < speed) {
+                    long finish = System.currentTimeMillis();
+                    if ((begin - finish) < 1) {
+                        Thread.sleep(1 - (begin - finish));
+                    }
+                    downloadData = 0;
+                    begin = System.currentTimeMillis();
+                    fileOutputStream.write(dateBuffer, 0, downloadData);
                 }
+                fileOutputStream.write(dateBuffer, 0, bytesRead);
             }
+
         } catch (IOException | InterruptedException e) {
             e.printStackTrace();
         }
@@ -39,5 +48,13 @@ public class Wget implements Runnable {
         Thread wget = new Thread(new Wget(url, speed));
         wget.start();
         wget.join();
+
+        long start = System.currentTimeMillis();
+        System.out.println(start + " : start");
+        Thread.sleep(1000);
+        long finish = System.currentTimeMillis();
+        System.out.println(finish + " : finish");
+        long elapsed = finish - start;
+        System.out.println("Прошло времени, мс: " + elapsed);
     }
 }
