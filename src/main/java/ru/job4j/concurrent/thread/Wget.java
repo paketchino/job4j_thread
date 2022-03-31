@@ -28,13 +28,13 @@ public class Wget implements Runnable {
                 if (downloadData < speed) {
                     long finish = System.currentTimeMillis();
                     if ((begin - finish) < 1) {
-                        Thread.sleep(1 - (begin - finish));
+                        Thread.sleep(1000 - (begin - finish));
                     }
                     downloadData = 0;
                     begin = System.currentTimeMillis();
                     fileOutputStream.write(dateBuffer, 0, downloadData);
                 }
-                fileOutputStream.write(dateBuffer, 0, bytesRead);
+                fileOutputStream.write(dateBuffer, 0, downloadData);
             }
 
         } catch (IOException | InterruptedException e) {
