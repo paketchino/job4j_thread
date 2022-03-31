@@ -32,7 +32,6 @@ public class Wget implements Runnable {
                     }
                     downloadData = 0;
                     begin = System.currentTimeMillis();
-                    fileOutputStream.write(dateBuffer, 0, downloadData);
                 }
                 fileOutputStream.write(dateBuffer, 0, downloadData);
             }
