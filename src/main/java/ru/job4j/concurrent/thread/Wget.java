@@ -24,11 +24,11 @@ public class Wget implements Runnable {
             int downloadData = 0;
             long begin = System.currentTimeMillis();
             while ((bytesRead = in.read(dateBuffer, 0, 1024)) != -1) {
-                downloadData = bytesRead;
-                if (downloadData < speed) {
+                downloadData += bytesRead;
+                if (downloadData >= speed) {
                     long finish = System.currentTimeMillis();
-                    if ((begin - finish) < 1) {
-                        Thread.sleep(1000 - (begin - finish));
+                    if ((finish - begin) < 1000) {
+                        Thread.sleep(1000 - (finish - begin));
                     }
                     downloadData = 0;
                     begin = System.currentTimeMillis();
@@ -43,17 +43,15 @@ public class Wget implements Runnable {
 
     public static void main(String[] args) throws InterruptedException {
         String url = args[0];
-        int speed = Integer.parseInt(args[1]);
+        int speed = 1048576;
         Thread wget = new Thread(new Wget(url, speed));
         wget.start();
         wget.join();
-
-        long start = System.currentTimeMillis();
-        System.out.println(start + " : start");
-        Thread.sleep(1000);
-        long finish = System.currentTimeMillis();
-        System.out.println(finish + " : finish");
-        long elapsed = finish - start;
-        System.out.println("Прошло времени, мс: " + elapsed);
+        if (args[0].isEmpty()) {
+            throw new IllegalArgumentException("Вы не ввели ссылку для скачивания");
+        }
+        if (args[1].isEmpty()) {
+            throw new IllegalArgumentException("Вы не ввели скорость скачивания");
+        }
     }
 }
