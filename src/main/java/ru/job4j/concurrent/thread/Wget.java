@@ -3,7 +3,6 @@ package ru.job4j.concurrent.thread;
 import java.io.BufferedInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.net.URL;
 
 public class Wget implements Runnable {
@@ -18,20 +17,13 @@ public class Wget implements Runnable {
 
     @Override
     public void run() {
-        URL urlRef = null;
-        try {
-            urlRef = new URL(url);
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        }
-        try {
-            assert urlRef != null;
-            try (BufferedInputStream in = new BufferedInputStream(urlRef.openStream());
-                     FileOutputStream fileOutputStream = new FileOutputStream(url)) {
-                byte[] dateBuffer = new byte[1024];
-                int bytesRead;
-                int downloadData = 0;
-                long begin = System.currentTimeMillis();
+        try (BufferedInputStream in = new BufferedInputStream(new URL(this.url).openStream());
+             FileOutputStream fileOutputStream = new FileOutputStream(url)) {
+            byte[] dateBuffer = new byte[1024];
+            int bytesRead;
+            int downloadData = 0;
+            long begin = System.currentTimeMillis();
+            while (!Thread.currentThread().isInterrupted()) {
                 while ((bytesRead = in.read(dateBuffer, 0, 1024)) != -1) {
                     downloadData += bytesRead;
                     if (downloadData >= speed) {
@@ -46,17 +38,21 @@ public class Wget implements Runnable {
                 }
             }
         } catch (IOException | InterruptedException e) {
-            e.printStackTrace();
+                e.printStackTrace();
+                Thread.currentThread().interrupt();
         }
     }
 
     public static void main(String[] args) throws InterruptedException {
-        int speed = Integer.parseInt("1048056");
-        Thread wget = new Thread(new Wget(args[0], speed));
+        Thread wget = new Thread(new Wget(args[0], Integer.parseInt(args[1])));
         wget.start();
         wget.join();
+        wget.interrupt();
         if (args[0].isEmpty()) {
             throw new IllegalArgumentException("Вы не ввели ссылку для скачивания");
+        }
+        if (args[1].isEmpty()) {
+            throw new IllegalArgumentException("В параметрах запуска отсуствует скорость скачивания");
         }
     }
 }
