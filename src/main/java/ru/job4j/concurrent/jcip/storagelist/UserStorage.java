@@ -6,6 +6,7 @@ import net.jcip.annotations.ThreadSafe;
 import java.util.ArrayList;
 import java.util.List;
 
+
 @ThreadSafe
 public class UserStorage implements Action, Transformer {
 
