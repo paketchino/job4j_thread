@@ -15,8 +15,7 @@ public class ReadFile {
         StringBuilder output = new StringBuilder();
         try (BufferedInputStream in = new BufferedInputStream(new FileInputStream(file))) {
             int data;
-            while ((data = in.read()) > 0) {
-                output.append((char) data);
+            while ((data = in.read()) != -1) {
                 if (filter.test((char) data)) {
                     output.append((char) data);
                 }
