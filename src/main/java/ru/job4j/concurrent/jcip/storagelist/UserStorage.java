@@ -10,7 +10,7 @@ import java.util.List;
 public class UserStorage implements Action, Transformer {
 
     @GuardedBy("this")
-    private List<User> storageList = new ArrayList<>();
+    private List<User> storageList;
 
     public UserStorage(List<User> storageList) {
         synchronized (UserStorage.class) {

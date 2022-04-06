@@ -1,17 +1,16 @@
 package ru.job4j.concurrent.jcip;
 
+import org.hamcrest.MatcherAssert;
 import org.junit.jupiter.api.Test;
 import ru.job4j.concurrent.jcip.storagelist.User;
 import ru.job4j.concurrent.jcip.storagelist.UserStorage;
-
 import static org.hamcrest.core.Is.is;
-import static org.junit.Assert.assertThat;
 import java.util.ArrayList;
 import java.util.List;
 
 class UserStorageTest {
 
-    private class ThreadUser extends Thread {
+    private static class ThreadUser extends Thread {
 
         private final UserStorage userStorage;
         private User user;
@@ -45,8 +44,8 @@ class UserStorageTest {
 
         threadUserFirst.join();
         threadUserSecond.join();
-        assertThat(userFirst.getAmount(), is(50));
-        assertThat(userSecond.getAmount(), is(250));
+        MatcherAssert.assertThat(userFirst.getAmount(), is(50));
+        MatcherAssert.assertThat(userSecond.getAmount(), is(250));
     }
 
 }
