@@ -1,10 +1,8 @@
 package ru.job4j.concurrent.thread;
 
 import java.io.BufferedInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
@@ -22,7 +20,7 @@ public class Wget implements Runnable {
 
     @Override
     public void run() {
-        try (BufferedInputStream in = new BufferedInputStream(new URL(this.url).openStream());
+            try (BufferedInputStream in = new BufferedInputStream(new URL(this.url).openStream());
              FileOutputStream fileOutputStream = new FileOutputStream(
                      Paths.get(new URI(url).getPath()).getFileName().toString())) {
             byte[] dateBuffer = new byte[1024];
