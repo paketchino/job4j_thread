@@ -1,13 +1,10 @@
 package ru.job4j.concurrent.jcip;
 
 import org.hamcrest.MatcherAssert;
-import org.junit.Ignore;
 import org.junit.jupiter.api.Test;
 import ru.job4j.concurrent.jcip.storagelist.User;
 import ru.job4j.concurrent.jcip.storagelist.UserStorage;
 import static org.hamcrest.core.Is.is;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -30,7 +27,6 @@ class UserStorageTest {
         }
     }
 
-    @Ignore
     @Test
     public void whenTransferCash2UserThenExecuteMethodTransfer() throws InterruptedException {
         User userFirst = new User(1, 100);
@@ -39,6 +35,7 @@ class UserStorageTest {
         userMap.put(userFirst.getId(), userFirst);
         userMap.put(userSecond.getId(), userSecond);
         final UserStorage userStorage = new UserStorage(userMap);
+        userStorage.copy();
         userStorage.transfer(1, 2, 50);
         Thread threadUserFirst = new ThreadUser(userStorage, userFirst);
         Thread threadUserSecond = new ThreadUser(userStorage, userSecond);
