@@ -28,19 +28,17 @@ public class Wget implements Runnable {
             int downloadData = 0;
             long begin = System.currentTimeMillis();
             try {
-                while (!Thread.currentThread().isInterrupted()) {
-                    while ((bytesRead = in.read(dateBuffer, 0, 1024)) != -1) {
-                        downloadData += bytesRead;
-                        if (downloadData >= speed) {
-                            long finish = System.currentTimeMillis();
-                            if ((finish - begin) < 1000) {
-                                Thread.sleep(1000 - (finish - begin));
-                            }
-                            downloadData = 0;
-                            begin = System.currentTimeMillis();
+                while ((bytesRead = in.read(dateBuffer, 0, 1024)) != -1) {
+                    downloadData += bytesRead;
+                    if (downloadData >= speed) {
+                        long finish = System.currentTimeMillis();
+                        if ((finish - begin) < 1000) {
+                            Thread.sleep(1000 - (finish - begin));
                         }
-                        fileOutputStream.write(dateBuffer, 0, bytesRead);
+                        downloadData = 0;
+                        begin = System.currentTimeMillis();
                     }
+                    fileOutputStream.write(dateBuffer, 0, bytesRead);
                 }
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
@@ -54,7 +52,6 @@ public class Wget implements Runnable {
         Thread wget = new Thread(new Wget(args[0], Integer.parseInt(args[1])));
         wget.start();
         wget.join();
-        wget.interrupt();
         if (args[0].isEmpty()) {
             throw new IllegalArgumentException("Вы не ввели ссылку для скачивания");
         }
