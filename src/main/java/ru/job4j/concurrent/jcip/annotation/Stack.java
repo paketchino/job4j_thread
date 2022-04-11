@@ -1,4 +1,4 @@
-package ru.job4j.concurrent.jcip.annotation.notthreadstate;
+package ru.job4j.concurrent.jcip.annotation;
 
 public class Stack<T> {
 

@@ -1,17 +1,14 @@
 package ru.job4j.concurrent.jcip.annotation;
 
-import org.junit.Ignore;
 import org.junit.jupiter.api.Test;
-
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
-class StackTest {
+class CASStackTest {
 
-    @Ignore
     @Test
     public void when3PushThen3Poll() {
-        Stack<Integer> stack = new Stack<>();
+        CASStack<Integer> stack = new CASStack<>();
         stack.push(1);
         stack.push(2);
         stack.push(3);
@@ -20,22 +17,19 @@ class StackTest {
         assertThat(stack.poll(), is(1));
     }
 
-    @Ignore
     @Test
     public void when1PushThen1Poll() {
-        Stack<Integer> stack = new Stack<>();
+        CASStack<Integer> stack = new CASStack<>();
         stack.push(1);
         assertThat(stack.poll(), is(1));
     }
 
-    @Ignore
     @Test
     public void when2PushThen2Poll() {
-        Stack<Integer> stack = new Stack<>();
+        CASStack<Integer> stack = new CASStack<>();
         stack.push(1);
         stack.push(2);
         assertThat(stack.poll(), is(2));
         assertThat(stack.poll(), is(1));
     }
-
 }
