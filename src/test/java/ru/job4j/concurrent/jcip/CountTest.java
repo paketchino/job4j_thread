@@ -1,10 +1,10 @@
 package ru.job4j.concurrent.jcip;
 
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
 
-class CountTest {
+public class CountTest {
     /**
      * Класс описывает нить со счетчиком.
      */

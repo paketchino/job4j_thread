@@ -1,7 +1,7 @@
 package ru.job4j.concurrent.jcip.annotation;
 
 import org.hamcrest.MatcherAssert;
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,7 +9,7 @@ import java.util.Set;
 import java.util.TreeSet;
 import static org.hamcrest.core.Is.is;
 
-class SingleLockListTest {
+public class SingleLockListTest {
 
     @Test
     public void add() throws InterruptedException {

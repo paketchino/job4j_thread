@@ -1,14 +1,14 @@
 package ru.job4j.concurrent.jcip;
 
 import org.hamcrest.MatcherAssert;
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
 import ru.job4j.concurrent.jcip.storagelist.User;
 import ru.job4j.concurrent.jcip.storagelist.UserStorage;
 import static org.hamcrest.core.Is.is;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-class UserStorageTest {
+public class UserStorageTest {
 
     private static class ThreadUser extends Thread {
 

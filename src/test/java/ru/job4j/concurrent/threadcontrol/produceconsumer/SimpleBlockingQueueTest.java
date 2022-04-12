@@ -1,12 +1,13 @@
 package ru.job4j.concurrent.threadcontrol.produceconsumer;
 
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
+
 import java.util.Arrays;
 import java.util.concurrent.CopyOnWriteArrayList;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
-class SimpleBlockingQueueTest {
+public class SimpleBlockingQueueTest {
 
     @Test
     public void whenProducerAddThenConsumerPoll() throws InterruptedException {

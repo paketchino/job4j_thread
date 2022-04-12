@@ -1,12 +1,12 @@
 package ru.job4j.concurrent.jcip.annotation;
 
 import org.junit.Ignore;
-import org.junit.jupiter.api.Test;
 
+import org.junit.Test;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
-class StackTest {
+public class StackTest {
 
     @Ignore
     @Test
