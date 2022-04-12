@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 @ThreadSafe
 public class SingleLockList<T> implements Iterable<T> {
@@ -13,8 +14,7 @@ public class SingleLockList<T> implements Iterable<T> {
     private final List<T> list;
 
     public SingleLockList(List<T> list) {
-        this.list = Collections.synchronizedList(list);
-        copy(this.list);
+        this.list = copy(list);
     }
 
     public synchronized void add(T value) {
@@ -25,12 +25,8 @@ public class SingleLockList<T> implements Iterable<T> {
         return list.get(index);
     }
 
-    private synchronized List<T> copy(List<T> list) {
-        List<T> copyList = new ArrayList<>();
-        for (T t : list) {
-            copyList.add(t);
-        }
-        return copyList;
+    private CopyOnWriteArrayList<T> copy(List<T> list) {
+        return new CopyOnWriteArrayList<>(list);
     }
 
     @Override
