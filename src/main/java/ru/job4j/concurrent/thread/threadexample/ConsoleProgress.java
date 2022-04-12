@@ -1,4 +1,4 @@
-package ru.job4j.concurrent.thread.ThreadExample;
+package ru.job4j.concurrent.thread.threadexample;
 
 public class ConsoleProgress implements Runnable {
 
