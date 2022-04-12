@@ -1,4 +1,7 @@
-package ru.job4j.concurrent;
+package ru.job4j.concurrent.thread.ThreadExample;
+
+import ru.job4j.concurrent.User;
+import ru.job4j.concurrent.UserCache;
 
 public class ShareNotSafe {
     public static void main(String[] args) throws InterruptedException {

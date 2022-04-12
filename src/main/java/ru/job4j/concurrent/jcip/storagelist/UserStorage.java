@@ -1,39 +1,22 @@
 package ru.job4j.concurrent.jcip.storagelist;
 
-import net.jcip.annotations.GuardedBy;
 import net.jcip.annotations.ThreadSafe;
-
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.function.Predicate;
-import java.util.stream.Stream;
 
 @ThreadSafe
 public class UserStorage implements Action, Transformer {
 
-    @GuardedBy("this")
-    private Map<Integer, User> userMap;
-
-    public UserStorage(Map<Integer, User> userMap) {
-        this.userMap = userMap;
-    }
-
-    public synchronized Map<Integer, User> copy() {
-        Map<Integer, User> copy = new ConcurrentHashMap<>();
-        for (User u : userMap.values()) {
-            copy.put(u.getId(), u);
-        }
-        return copy;
-    }
+    private final Map<Integer, User> userMap = new ConcurrentHashMap<>();
 
     @Override
     public synchronized boolean add(User user) {
-        return userMap.put(user.getId(), new User(user.getId(), user.getAmount())) != null;
+        return userMap.put(user.getId(), user) != null;
     }
 
     @Override
     public synchronized boolean update(User user) {
-        return userMap.replace(user.getId(), new User(user.getId(), user.getAmount())) != null;
+        return userMap.replace(user.getId(), user) != null;
     }
 
     @Override
@@ -43,11 +26,11 @@ public class UserStorage implements Action, Transformer {
 
     @Override
     public synchronized void transfer(int fromId, int told, int amount) {
-        if (copy().isEmpty()) {
+        if (userMap.isEmpty()) {
             throw new IllegalArgumentException("Список пуст");
         }
-        User userFromId = copy().get(fromId);
-        User userToldId = copy().get(told);
+        User userFromId = userMap.get(fromId);
+        User userToldId = userMap.get(told);
         if (userFromId.getAmount() >= amount) {
             userFromId.setAmount(userFromId.getAmount() - amount);
             userToldId.setAmount(userToldId.getAmount() + amount);

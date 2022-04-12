@@ -1,4 +1,4 @@
-package ru.job4j.concurrent;
+package ru.job4j.concurrent.thread.ThreadExample;
 
 public class ThreadState {
     public static void main(String[] args) {

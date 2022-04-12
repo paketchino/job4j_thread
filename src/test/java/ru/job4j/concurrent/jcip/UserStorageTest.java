@@ -31,11 +31,9 @@ public class UserStorageTest {
     public void whenTransferCash2UserThenExecuteMethodTransfer() throws InterruptedException {
         User userFirst = new User(1, 100);
         User userSecond = new User(2, 200);
-        Map<Integer, User> userMap = new ConcurrentHashMap<>();
-        userMap.put(userFirst.getId(), userFirst);
-        userMap.put(userSecond.getId(), userSecond);
-        final UserStorage userStorage = new UserStorage(userMap);
-        userStorage.copy();
+        final UserStorage userStorage = new UserStorage();
+        userStorage.add(userFirst);
+        userStorage.add(userSecond);
         userStorage.transfer(1, 2, 50);
         Thread threadUserFirst = new ThreadUser(userStorage, userFirst);
         Thread threadUserSecond = new ThreadUser(userStorage, userSecond);
