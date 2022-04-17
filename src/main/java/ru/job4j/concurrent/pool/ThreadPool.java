@@ -1,80 +1,59 @@
 package ru.job4j.concurrent.pool;
 
 import ru.job4j.concurrent.threadcontrol.produceconsumer.SimpleBlockingQueue;
-
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.List;
 
 public class ThreadPool implements Runnable {
 
+    private Thread thread = null;
+    private final SimpleBlockingQueue<Runnable> taskQueue = new SimpleBlockingQueue<>(5);
+    private List<Thread> threads = new ArrayList<>();
+    private boolean isStopped = false;
     private final int size = Runtime.getRuntime().availableProcessors();
-    private final List<Thread> threads = new LinkedList<>();
-    private final SimpleBlockingQueue<Runnable> tasks = new SimpleBlockingQueue<>(10);
 
     public void work(Runnable job) throws InterruptedException {
-        while (tasks.isEmpty()) {
-            wait();
-        }
         for (int i = 0; i < size; i++) {
-            System.out.println(Thread.currentThread().getName() + " work");
             threads.add(new Thread(job));
-            tasks.offer(job);
+            this.taskQueue.offer(job);
         }
-        for (Thread st : threads) {
-            System.out.println(Thread.currentThread().getName() + " thread starting");
-            st.start();
+        for (Thread th : threads) {
+            new Thread(th).start();
         }
     }
 
-    public void shutdown() {
-        for (Thread th : threads) {
-            th.interrupt();
+    public synchronized boolean isStopped() {
+        return isStopped;
+    }
+
+    public synchronized void shutdown() {
+        this.isStopped = true;
+        for (Thread thread : threads) {
+            thread.interrupt();
+        }
+    }
+
+    public synchronized void waitUntilAllTasksFinished() {
+        while (this.taskQueue.getSize() > 0) {
+            try {
+                Thread.sleep(1);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
     }
 
     @Override
     public void run() {
-        while (Thread.currentThread().isInterrupted()) {
+        thread = Thread.currentThread();
+        while (!isStopped()) {
             try {
-                System.out.println(Thread.currentThread().getName() + " running");
-                tasks.poll();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
+                Runnable runnable = (Runnable) taskQueue.poll();
+                runnable.run();
+            } catch (Exception e) {
+                Thread.currentThread().interrupt();
             }
-            shutdown();
         }
     }
 
-    public static void main(String[] args) throws InterruptedException {
-        Thread threadFirst = new Thread(
-                () -> {
-                    for (int i = 0; i < 10; i++) {
-                        System.out.println(i);
-                    }
-                }
-        );
-
-        Thread threadSecond = new Thread(
-                () -> {
-                    for (int i = 11; i < 20; i++) {
-                        System.out.println(i);
-                    }
-                }
-        );
-        Thread threadThird = new Thread(
-                () -> {
-                    for (int i = 21; i < 30; i++) {
-                        System.out.println(i);
-                    }
-                }
-        );
-
-        ThreadPool threadPool = new ThreadPool();
-        threadPool.work(threadFirst);
-        threadPool.work(threadSecond);
-        threadPool.work(threadThird);
-        threadPool.run();
-        threadPool.shutdown();
-        Thread.currentThread().join();
-    }
 }
