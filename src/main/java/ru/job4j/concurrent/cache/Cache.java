@@ -13,12 +13,16 @@ public class Cache {
 
     public boolean update(Base model) {
         Base storage = memory.get(model.getId());
-        if (storage.getVersion() != model.getVersion()) {
-            throw new OptimisticException("Version are not equal");
-        }
-        return memory.
+        var template = memory.
                 computeIfPresent(
-                        model.getId(), (now, update) -> new Base(now, update.getVersion() + 1)) != null;
+                        model.getId(), (now, update) ->
+                        {
+                            if (storage.getVersion() != model.getVersion()) {
+                                throw new OptimisticException("Version are not equal");
+                            }
+                            return new Base(now, update.getVersion() + 1);
+                        });
+        return template != null;
     }
 
     public Integer getSizeMap() {
