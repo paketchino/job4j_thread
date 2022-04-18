@@ -1,5 +1,6 @@
 package ru.job4j.concurrent.threadcontrol.produceconsumer;
 
+
 import net.jcip.annotations.GuardedBy;
 import net.jcip.annotations.ThreadSafe;
 
@@ -18,7 +19,7 @@ public class SimpleBlockingQueue<T> {
         this.limit = limit;
     }
 
-    public int getSize() {
+    public synchronized int getSize() {
         return queue.size();
     }
 
