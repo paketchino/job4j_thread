@@ -1,5 +1,6 @@
 package ru.job4j.concurrent.pool.mergesort;
 
+import java.util.Arrays;
 import java.util.concurrent.ForkJoinPool;
 import java.util.concurrent.RecursiveTask;
 
@@ -52,6 +53,11 @@ public class ParallelMergeSort extends RecursiveTask<int[]> {
     public static int[] sort(int[] array) {
         ForkJoinPool forkJoinPool = new ForkJoinPool();
         return forkJoinPool.invoke(new ParallelMergeSort(array, 0, array.length - 1));
+    }
+
+    public static void main(String[] args) {
+        int[] array = new int[] {2, 8, 9, 10, 78, 100, 1, 4};
+        System.out.println(Arrays.toString(sort(array)));
     }
 
 }
