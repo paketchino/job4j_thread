@@ -4,55 +4,33 @@ import ru.job4j.concurrent.threadcontrol.produceconsumer.SimpleBlockingQueue;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ThreadPool implements Runnable {
-
-    private Thread thread = null;
-    private final SimpleBlockingQueue<Runnable> taskQueue = new SimpleBlockingQueue<>(5);
-    private List<Thread> threads = new ArrayList<>();
-    private boolean isStopped = false;
+public class ThreadPool {
+    private SimpleBlockingQueue<Runnable> taskQueue = null;
+    private List<ThreadRunnable> threads = new ArrayList<>();
+    private volatile boolean isStopped = false;
     private final int size = Runtime.getRuntime().availableProcessors();
 
-    public void work(Runnable job) throws InterruptedException {
+    public ThreadPool() {
+        taskQueue = new SimpleBlockingQueue<>(5);
         for (int i = 0; i < size; i++) {
-            threads.add(new Thread(job));
-            this.taskQueue.offer(job);
+            threads.add(new ThreadRunnable(taskQueue));
         }
-        for (Thread th : threads) {
+        for (ThreadRunnable th : threads) {
             new Thread(th).start();
         }
     }
+    public void work(Runnable job) throws InterruptedException {
+        this.taskQueue.offer(job);
+    }
 
-    public synchronized boolean isStopped() {
+    public boolean isStopped() {
         return isStopped;
     }
 
-    public synchronized void shutdown() {
+    public void shutdown() {
         this.isStopped = true;
-        for (Thread thread : threads) {
-            thread.interrupt();
-        }
-    }
-
-    public synchronized void waitUntilAllTasksFinished() {
-        while (this.taskQueue.getSize() > 0) {
-            try {
-                Thread.sleep(1);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
-    @Override
-    public void run() {
-        thread = Thread.currentThread();
-        while (!isStopped()) {
-            try {
-                Runnable runnable = (Runnable) taskQueue.poll();
-                runnable.run();
-            } catch (Exception e) {
-                Thread.currentThread().interrupt();
-            }
+        for (ThreadRunnable thread : threads) {
+            thread.doStop();
         }
     }
 
