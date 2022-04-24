@@ -7,13 +7,19 @@ import java.util.concurrent.ExecutionException;
 
 public class AsyncSum {
 
+    /**
+     * считаем сумму по главной диагонали
+     * считаем суммы по побочным диагоналям
+     * @param matrix массив
+     * @return массив с асинхроным выполением
+     * @throws ExecutionException искл
+     * @throws InterruptedException искл
+     */
     public static int[] asyncSum(int[][] matrix) throws ExecutionException, InterruptedException {
         int n = matrix.length;
         int[] sums = new int[2 * n];
         Map<Integer, CompletableFuture<Integer>> futures = new HashMap<>();
-        // считаем сумму по главной диагонали
         futures.put(0, getTask(matrix, 0, n - 1, n - 1));
-        // считаем суммы по побочным диагоналям
         for (int k = 1; k <= n; k++) {
             futures.put(k, getTask(matrix, 0, k - 1,  k - 1));
             if (k < n) {
