@@ -1,5 +1,6 @@
 package ru.job4j.concurrent.completablefuture;
 
+import org.junit.Ignore;
 import org.junit.Test;
 import java.util.concurrent.ExecutionException;
 import static org.junit.Assert.assertThat;
@@ -7,6 +8,17 @@ import static org.hamcrest.core.Is.is;
 
 public class RolColSumTest {
 
+    @Ignore
+    @Test
+    public void whenSumEqualsAsyncSum() {
+        int[][] array = new int[][] {
+                {1, 2, 3},
+                {4, 5, 6},
+                {7, 8, 9}};
+        RolColSum.Sums[] sum = RolColSum.sum(array);
+        RolColSum.Sums[] asyncSum = RolColSum.sum(array);
+        assertThat(asyncSum, is(sum));
+    }
     @Test
     public void whenSumExecuteSingleThread() {
         String excepted = "По ряду {6}, по столбцу {12} По ряду {15}, по столбцу {15} По ряду {24}, по столбцу {18} ";

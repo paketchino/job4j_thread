@@ -32,6 +32,14 @@ public class RolColSum {
         public void setColSum(int colSum) {
             this.colSum = colSum;
         }
+
+        @Override
+        public String toString() {
+            return "Sums{" +
+                    "rowSum=" + rowSum +
+                    ", colSum=" + colSum +
+                    '}';
+        }
     }
 
     public static Sums[] sum(int[][] matrix) {
