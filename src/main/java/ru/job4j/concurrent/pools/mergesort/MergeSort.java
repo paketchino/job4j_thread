@@ -1,4 +1,4 @@
-package ru.job4j.concurrent.pool.mergesort;
+package ru.job4j.concurrent.pools.mergesort;
 
 public class MergeSort {
 

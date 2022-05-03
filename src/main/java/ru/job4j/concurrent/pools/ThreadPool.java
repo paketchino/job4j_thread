@@ -1,4 +1,4 @@
-package ru.job4j.concurrent.pool;
+package ru.job4j.concurrent.pools;
 
 import ru.job4j.concurrent.threadcontrol.produceconsumer.SimpleBlockingQueue;
 import java.util.ArrayList;

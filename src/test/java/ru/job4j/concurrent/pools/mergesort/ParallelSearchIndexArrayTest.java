@@ -1,4 +1,4 @@
-package ru.job4j.concurrent.pool.mergesort;
+package ru.job4j.concurrent.pools.mergesort;
 
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.*;
