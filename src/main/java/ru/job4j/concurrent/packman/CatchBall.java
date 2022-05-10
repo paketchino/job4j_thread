@@ -19,8 +19,14 @@ public class CatchBall {
         }
     }
 
-    public static void main(String[] args) {
-        Title title = new Title("Describ");
-        title.setName("Harry Potter");
+    class Number {
+
+         int n;
+         public Integer getRecursive() {
+             return n * n;
+         }
+
+
     }
+
 }
