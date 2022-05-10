@@ -36,5 +36,4 @@ public class UserStorage implements Action, Transformer {
             userToldId.setAmount(userToldId.getAmount() + amount);
         }
     }
-
 }
