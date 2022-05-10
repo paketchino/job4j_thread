@@ -1,5 +1,6 @@
 package ru.job4j.concurrent.packman;
 
+import java.util.function.Function;
 import java.util.function.Predicate;
 
 public class CatchBall {
@@ -36,6 +37,10 @@ public class CatchBall {
              }
              return false;
          }
+    }
+
+    public Integer function(Function<Integer, Integer> function, int a, int b) {
+         return function.apply(a);
     }
 
 }
