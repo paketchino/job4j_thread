@@ -1,5 +1,7 @@
 package ru.job4j.concurrent.packman;
 
+import java.util.function.Predicate;
+
 public class CatchBall {
 
      static class Title {
@@ -26,7 +28,14 @@ public class CatchBall {
              return n * n;
          }
 
-
+         public Boolean checkNatNumber(Predicate<Integer> predicate, int n) {
+             if (predicate.test(n)) {
+                 if (n % 2 == 0) {
+                     return true;
+                 }
+             }
+             return false;
+         }
     }
 
 }
