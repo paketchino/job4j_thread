@@ -1,5 +1,7 @@
 package ru.job4j.concurrent.packman;
 
+import java.util.function.Predicate;
+
 public class CatchBall {
 
      static class Title {
@@ -19,8 +21,21 @@ public class CatchBall {
         }
     }
 
-    public static void main(String[] args) {
-        Title title = new Title("Describ");
-        title.setName("Harry Potter");
+    class Number {
+
+         int n;
+         public Integer getRecursive() {
+             return n * n;
+         }
+
+         public Boolean checkNatNumber(Predicate<Integer> predicate, int n) {
+             if (predicate.test(n)) {
+                 if (n % 2 == 0) {
+                     return true;
+                 }
+             }
+             return false;
+         }
     }
+
 }
