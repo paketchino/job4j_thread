@@ -12,46 +12,43 @@ public class RolColSumTest {
 
     @Ignore
     @Test
-    public void whenSumEqualsAsyncSum() {
+    public void whenSumEqualsAsyncSum() throws ExecutionException, InterruptedException {
         int[][] array = new int[][] {
                 {1, 2, 3},
                 {4, 5, 6},
                 {7, 8, 9}};
         RolColSum.Sums[] sum = RolColSum.sum(array);
-        RolColSum.Sums[] asyncSum = RolColSum.sum(array);
+        RolColSum.Sums[] asyncSum = RolColSum.asyncSum(array);
         assertArrayEquals(sum, asyncSum);
     }
     @Test
     public void whenSumExecuteSingleThread() {
-        String excepted = "По ряду {6}, по столбцу {12} По ряду {15}, по столбцу {15} По ряду {24}, по столбцу {18} ";
-        StringBuilder sb = new StringBuilder();
         int[][] array = new int[][] {
                 {1, 2, 3},
                 {4, 5, 6},
                 {7, 8, 9}};
-        RolColSum.Sums[] rolColSums = RolColSum.sum(array);
-        for (RolColSum.Sums s : rolColSums) {
-            sb.append(
-                    String.format("По ряду {%d}, по столбцу {%d}", s.getRowSum(), s.getColSum()))
-                    .append(" ");
-        }
-        assertThat(excepted, is(sb.toString()));
+        RolColSum.Sums[] sum = RolColSum.sum(array);
+        RolColSum.Sums[] expected = {
+                new RolColSum.Sums(6, 12),
+                new RolColSum.Sums(15, 15),
+                new RolColSum.Sums(24, 18)
+        };
+        assertArrayEquals(sum, expected);
     }
 
     @Test
     public void whenAsyncThenExecuteAsynchronously() throws ExecutionException, InterruptedException {
-        String excepted = "По ряду {6}, по столбцу {12} По ряду {15}, по столбцу {15} По ряду {24}, по столбцу {18} ";
-        StringBuilder sb = new StringBuilder();
         int[][] array = new int[][] {
                 {1, 2, 3},
                 {4, 5, 6},
                 {7, 8, 9}};
         RolColSum.Sums[] rolColSums = RolColSum.asyncSum(array);
-        for (RolColSum.Sums s : rolColSums) {
-            sb.append(
-                    String.format("По ряду {%d}, по столбцу {%d}", s.getRowSum(), s.getColSum()))
-                    .append(" ");
-        }
-        assertThat(excepted, is(sb.toString()));
+        RolColSum.Sums[] excepted =  {
+                new RolColSum.Sums(6, 12),
+                new RolColSum.Sums(15, 15),
+                new RolColSum.Sums(24, 18)
+        };
+        assertArrayEquals(rolColSums, excepted);
+
     }
 }
